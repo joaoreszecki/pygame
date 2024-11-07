@@ -13,12 +13,14 @@ HEIGHT = 720
 window = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption('jogo do pato')
 macaco_img = pygame.image.load('assets/img/macaco.png').convert_alpha()
-assets={}
-fonte=pygame.font.get_default_font()
-assets['fonte']=pygame.font.Font(fonte,28)
-assets['pontos']=0
-assets['tempo']=0
-assets['tempo_inicial']=0
+assets = {}
+fonte = pygame.font.get_default_font()
+fonte2 = pygame.font.match_font('arial')
+assets['fonte'] = pygame.font.Font(fonte,28)
+assets['fonte2'] = pygame.font.Font(fonte2,28)
+assets['pontos'] = 0
+assets['tempo'] = 0
+assets['tempo_inicial'] = 0
 
 
 # ----- Inicia estruturas de dados
@@ -37,13 +39,10 @@ class Monkey (pygame.sprite.Sprite):
 class Pato(pygame.sprite.Sprite):
     def _init_(self):
         pygame.sprite.Sprite._init_(self)
-        self.image= pygame.image.load("assets\img\WIN_20240909_16_24_05_Pro.jpg")
-        self.image=pygame.transform.scale(self.image,(50,50))
-        self.rect=self.image.get_rect()
-        # self.rect.x=randint(1070,1080)
-        # self.rect.y=randint(0,720)
-        # self.speedx=randint(-5,-3)
-        # self.speedy=randint(-1,-1)
+        self.image = pygame.image.load("assets\img\patinhoquaqua.png")
+        self.image = pygame.transform.scale(self.image,(50,50))
+        self.rect = self.image.get_rect()
+        
         if randint(1, 2) == 1:
             # Lado direito
             self.rect.x = randint(1070, 1080)
@@ -58,10 +57,10 @@ class Pato(pygame.sprite.Sprite):
 
 #atualiza as posicoes e tudo
     def update(self):
-        self.rect.x+=self.speedx
-        self.rect.y+=self.speedy
+        self.rect.x += self.speedx
+        self.rect.y += self.speedy
 
-        if self.rect.x<=0 or self.rect.y<=0 or self.rect.x>1080 or self.rect.y>720:
+        if self.rect.x <= 0 or self.rect.y <= 0 or self.rect.x > 1080 or self.rect.y > 720:
             if randint(1, 2) == 1:
             # Lado direito
                 self.rect.x = randint(1070, 1080)
@@ -84,6 +83,7 @@ image = pygame.image.load('assets/img/fundo.jpg').convert()
 image = pygame.transform.scale(image,(1080,720)) 
 all_sprites = pygame.sprite.Group()
 all_sprites.add(Monkey())
+
 #criando patos
 for i in range(15):
     patinhos = Pato()
@@ -94,20 +94,21 @@ while game!= False:
     while game == 'jogo':
         clock.tick(FPS)
         #FUNÇAO TEMPO
-        assets['tempo']+=((clock.get_time()/1000))
+        assets['tempo'] += ((clock.get_time()/1000))
         if assets['tempo'] >= 25:
-            game= False
+            game= 'gameover'
         # ----- Trata eventos
         for event in pygame.event.get():
             # ----- Verifica consequências
             if event.type == pygame.QUIT:
                 game = False
-            if event.type ==pygame.MOUSEBUTTONDOWN:
+            if event.type == pygame.MOUSEBUTTONDOWN:
                 for pato in all_sprites:
-                    if pato.rect.x<=event.pos[0]<=pato.rect.x+50 and pato.rect.y<=event.pos[1]<=pato.rect.y+50:
+                    if pato.rect.x <= event.pos[0] <= pato.rect.x+50 and pato.rect.y <= event.pos[1] <= pato.rect.y+50:
                         assets['pontos'] += 1
                         pato.rect.x =-100
                         pato.rect.y =-100
+                        
         # ----- Gera saídas
         texto_pontos = assets['fonte'].render(f"{assets['pontos']}", True, (255, 255, 0))
         if assets['tempo']>=0:
@@ -124,15 +125,19 @@ while game!= False:
         all_sprites.draw(window)
         window.blit(texto_pontos, texto_pontos_rect)
         window.blit(texto_tempo, texto_tempo_rect)
+        
+    
 
 
         # ----- Atualiza estado do jogo
         pygame.display.update()  # Mostra o novo frame para o jogador
-    while game=='inicio':
+    while game == 'inicio':
         clock.tick(FPS)
         assets['pontos'] = 0
         assets['tempo_inicial'] += (clock.get_time()/1000)
-
+        font = pygame.font.SysFont(None, 48)
+        texto_tela_inicial = assets['fonte'].render('MATA PATO', True, (0, 0, 255))
+        texto_tela_inicial2 = assets['fonte'].render('Precione espaço para começar', True, (0, 0, 255))
         for event in pygame.event.get():
             # ----- Verifica consequências
             if event.type == pygame.QUIT:
@@ -141,7 +146,27 @@ while game!= False:
                 if event.key == pygame.K_SPACE:
                     game ='jogo'
         window.fill((0, 0, 0))  # Preenche com a cor branca
+        window.blit(texto_tela_inicial,(WIDTH/2-40,HEIGHT/2-10))
+        window.blit(texto_tela_inicial2,(WIDTH/2-40,240))
+        pygame.display.update() 
+         # Mostra o novo frame para o jogador
+    while game == 'gameover':
+        clock.tick(FPS)
+        assets['pontos'] = 0
+        assets['tempo'] = 0
+        assets['tempo_inicial'] += (clock.get_time()/1000)
+        texto_tela_final = assets['fonte2'].render('Game Over ', True, (0, 0, 0))
 
+        for event in pygame.event.get():
+            # ----- Verifica consequências
+            if event.type == pygame.QUIT:
+                game = False
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE:
+                    game ='inicio'
+        window.fill((0, 0, 255))  # Preenche com a cor branca
+        window.blit(texto_tela_final,(WIDTH/2-40,HEIGHT/2-10))
+        pygame.display.update()  # Mostra o novo frame para o jogador
 # ===== Finalização =====
 
 pygame.quit()  # Função do PyGame que finaliza os recursos utilizados

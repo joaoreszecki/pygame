@@ -3,6 +3,9 @@
 import pygame
 from random import *
 from pygame.sprite import Group
+# Inicialize o clock no início do programa
+clock = pygame.time.Clock()
+FPS = 60
 
 pygame.init()
 
@@ -25,17 +28,16 @@ assets['tempo_inicial'] = 0
 
 # ----- Inicia estruturas de dados
 # Definindo os novos tipos
-class Monkey (pygame.sprite.Sprite):
+class Monkey(pygame.sprite.Sprite):
     def _init_(self):
         # adicionamacaco
         pygame.sprite.Sprite._init_(self)
-        self.image = pygame.image.load("assets\img\macaco.png")
-        self.image = pygame.transform.scale(self.image,(150,150))
+        self.image = pygame.image.load("assets/img/macaco.png")
+        self.image = pygame.transform.scale(self.image, (150, 150))
         self.rect = self.image.get_rect()
         self.rect.centerx = WIDTH / 2
         self.rect.bottom = HEIGHT - 10
         self.speedx = 0
-
 class Pato(pygame.sprite.Sprite):
     def _init_(self):
         pygame.sprite.Sprite._init_(self)
@@ -72,13 +74,49 @@ class Pato(pygame.sprite.Sprite):
             
             self.rect.y = randint(0, 720)
             self.speedy = randint(-1, 1)  
+ 
+class PatoFAST(pygame.sprite.Sprite):
+    def _init_(self):
+        pygame.sprite.Sprite._init_(self)
+        self.image = pygame.image.load("assets/img/patosfast.png")
+        self.image = pygame.transform.scale(self.image, (50, 50))
+        self.rect = self.image.get_rect()  # Corrige para usar self.rect
+        
+        if randint(1, 2) == 1:
+            # Lado direito
+            self.rect.x = randint(1070, 1080)
+            self.speedx = randint(-7, -4)
+        else:
+            # Lado esquerdo
+            self.rect.x = randint(10, 60)
+            self.speedx = randint(4, 7)
+        
+        self.rect.y = randint(0, 720)
+        self.speedy = randint(-1, 1)
+
+    def update(self):
+        self.rect.x += self.speedx
+        self.rect.y += self.speedy
+
+        if self.rect.x <= 0 or self.rect.y <= 0 or self.rect.x > 1080 or self.rect.y > 720:
+            if randint(1, 2) == 1:
+                # Lado direito
+                self.rect.x = randint(1070, 1080)
+                self.speedx = randint(-7, -4)
+            else:
+                # Lado esquerdo
+                self.rect.x = randint(10, 60)
+                self.speedx = randint(4, 7)
+            
+            self.rect.y = randint(0, 720)
+            self.speedy = randint(-1, 1)
+
+
 
 # ----- Inicia estruturas de dados
 game = 'inicio'
 
 # ----- Inicia assets
-clock = pygame.time.Clock()
-FPS = 60
 image = pygame.image.load('assets/img/fundo.jpg').convert() 
 image = pygame.transform.scale(image,(1080,720)) 
 all_sprites = pygame.sprite.Group()
@@ -88,6 +126,9 @@ all_sprites.add(Monkey())
 for i in range(15):
     patinhos = Pato()
     all_sprites.add(patinhos)
+for i in range(5):
+    patinhos = PatoFAST()
+    all_sprites.add(patinhos)
 
 # ===== Loop principal =====
 while game!= False:
@@ -95,7 +136,7 @@ while game!= False:
         clock.tick(FPS)
         #FUNÇAO TEMPO
         assets['tempo'] += ((clock.get_time()/1000))
-        if assets['tempo'] >= 25:
+        if assets['tempo'] >= 20:
             game= 'gameover'
         # ----- Trata eventos
         for event in pygame.event.get():
@@ -103,11 +144,11 @@ while game!= False:
             if event.type == pygame.QUIT:
                 game = False
             if event.type == pygame.MOUSEBUTTONDOWN:
-                for pato in all_sprites:
-                    if pato.rect.x <= event.pos[0] <= pato.rect.x+50 and pato.rect.y <= event.pos[1] <= pato.rect.y+50:
+                for Pato in all_sprites:
+                    if Pato.rect.x <= event.pos[0] <= Pato.rect.x+50 and Pato.rect.y <= event.pos[1] <= Pato.rect.y+50:
                         assets['pontos'] += 1
-                        pato.rect.x =-100
-                        pato.rect.y =-100
+                        Pato.rect.x =-100
+                        Pato.rect.y =-100
                         
         # ----- Gera saídas
         texto_pontos = assets['fonte'].render(f"{assets['pontos']}", True, (255, 255, 0))
@@ -125,10 +166,7 @@ while game!= False:
         all_sprites.draw(window)
         window.blit(texto_pontos, texto_pontos_rect)
         window.blit(texto_tempo, texto_tempo_rect)
-        
     
-
-
         # ----- Atualiza estado do jogo
         pygame.display.update()  # Mostra o novo frame para o jogador
     while game == 'inicio':

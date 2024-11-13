@@ -29,9 +29,9 @@ assets['tempo_inicial'] = 0
 # ----- Inicia estruturas de dados
 # Definindo os novos tipos
 class Monkey(pygame.sprite.Sprite):
-    def _init_(self):
+    def __init__(self):
         # adicionamacaco
-        pygame.sprite.Sprite._init_(self)
+        pygame.sprite.Sprite.__init__(self)
         self.image = pygame.image.load("assets/img/macaco.png")
         self.image = pygame.transform.scale(self.image, (150, 150))
         self.rect = self.image.get_rect()
@@ -39,9 +39,9 @@ class Monkey(pygame.sprite.Sprite):
         self.rect.bottom = HEIGHT - 10
         self.speedx = 0
 class Pato(pygame.sprite.Sprite):
-    def _init_(self):
-        pygame.sprite.Sprite._init_(self)
-        self.image = pygame.image.load("assets\img\patinhoquaqua.png")
+    def __init__(self):
+        pygame.sprite.Sprite.__init__(self)
+        self.image = pygame.image.load("assets/img/patinhoquaqua.png")
         self.image = pygame.transform.scale(self.image,(50,50))
         self.rect = self.image.get_rect()
         
@@ -76,8 +76,8 @@ class Pato(pygame.sprite.Sprite):
             self.speedy = randint(-1, 1)  
  
 class PatoFAST(pygame.sprite.Sprite):
-    def _init_(self):
-        pygame.sprite.Sprite._init_(self)
+    def __init__(self):
+        pygame.sprite.Sprite.__init__(self)
         self.image = pygame.image.load("assets/img/patosfast.png")
         self.image = pygame.transform.scale(self.image, (50, 50))
         self.rect = self.image.get_rect()  # Corrige para usar self.rect
@@ -131,7 +131,7 @@ for i in range(5):
     all_sprites.add(patinhos)
 
 # ===== Loop principal =====
-while game!= False:
+while game != False:
     while game == 'jogo':
         clock.tick(FPS)
         #FUNÇAO TEMPO

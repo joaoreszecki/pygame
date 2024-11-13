@@ -144,11 +144,20 @@ while game != False:
             if event.type == pygame.QUIT:
                 game = False
             if event.type == pygame.MOUSEBUTTONDOWN:
-                for Pato in all_sprites:
-                    if Pato.rect.x <= event.pos[0] <= Pato.rect.x+50 and Pato.rect.y <= event.pos[1] <= Pato.rect.y+50:
-                        assets['pontos'] += 1
-                        Pato.rect.x =-100
-                        Pato.rect.y =-100
+                for Pato in all_sprites:  # Itera sobre todos os sprites
+        # Verifica se o clique está dentro do retângulo do sprite
+                    if (Pato.rect.x <= event.pos[0] <= Pato.rect.x + Pato.rect.width and Pato.rect.y <= event.pos[1] <= Pato.rect.y + Pato.rect.height):
+            # Adiciona pontos (diferente para Pato e PatoFAST)
+                        assets['pontos'] += 1  # A pontuação é definida na classe
+                        
+                        Pato.rect.x = -100
+                        Pato.rect.y = -100
+
+                for PatoFAST in all_sprites:
+                    if PatoFAST.rect.x <= event.pos[0] <= PatoFAST.rect.x+50 and PatoFAST.rect.y <= event.pos[1] <= PatoFAST.rect.y+50:
+                         assets['pontos'] += 3
+                         PatoFAST.rect.x =-100
+                         PatoFAST.rect.y =-100
                         
         # ----- Gera saídas
         texto_pontos = assets['fonte'].render(f"{assets['pontos']}", True, (255, 255, 0))

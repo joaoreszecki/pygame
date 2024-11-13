@@ -193,8 +193,8 @@ while game != False:
                 if event.key == pygame.K_SPACE:
                     game ='jogo'
         window.fill((0, 0, 0))  # Preenche com a cor branca
-        window.blit(texto_tela_inicial,(WIDTH/2-40,HEIGHT/2-10))
-        window.blit(texto_tela_inicial2,(WIDTH/2-40,240))
+        window.blit(texto_tela_inicial,(WIDTH/2-80,HEIGHT/2-10))
+        window.blit(texto_tela_inicial2,(WIDTH/2-200,240))
         pygame.display.update() 
          # Mostra o novo frame para o jogador
     while game == 'gameover':
@@ -202,6 +202,9 @@ while game != False:
         assets['pontos'] = 0
         assets['tempo'] = 0
         assets['tempo_inicial'] += (clock.get_time()/1000)
+        imagem_final = pygame.image.load('assets/img/fundo.jpg').convert() 
+        imagem_final = pygame.transform.scale(image,(1080,720)) 
+        
         texto_tela_final = assets['fonte2'].render('Game Over ', True, (0, 0, 0))
 
         for event in pygame.event.get():

@@ -3,6 +3,23 @@
 import pygame
 from random import *
 from pygame.sprite import Group
+import os
+from os import path
+
+img_dir=os.path.join(os.path.dirname(_file_),'assest\img')
+
+def load_spriteshhet(spritesheet,rows,columns):
+    sprite_width=spritesheet.get_width()//columns
+    sprite_height=spritesheet.get_height()//rows
+    sprites=[]
+    for row in range(rows):
+        for column in range(columns):
+            x= column* sprite_width
+            y= row * sprite_height
+            image = pygame.Surface((sprite_width,sprite_height),pygame.SRCALPHA)
+            image.blit(spritesheet,(0,0),pygame.Rect(x,y,sprite_width,sprite_height))
+            sprites.append(image)
+    return sprites
 # Inicialize o clock no início do programa
 clock = pygame.time.Clock()
 FPS = 60
@@ -29,9 +46,9 @@ assets['tempo_inicial'] = 0
 # ----- Inicia estruturas de dados
 # Definindo os novos tipos
 class Monkey(pygame.sprite.Sprite):
-    def __init__(self):
+    def _init_(self):
         # adicionamacaco
-        pygame.sprite.Sprite.__init__(self)
+        pygame.sprite.Sprite._init_(self)
         self.image = pygame.image.load("assets/img/macaco.png")
         self.image = pygame.transform.scale(self.image, (150, 150))
         self.rect = self.image.get_rect()
@@ -39,10 +56,23 @@ class Monkey(pygame.sprite.Sprite):
         self.rect.bottom = HEIGHT - 10
         self.speedx = 0
 class Pato(pygame.sprite.Sprite):
-    def __init__(self):
-        pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.image.load("assets/img/patinhoquaqua.png")
-        self.image = pygame.transform.scale(self.image,(50,50))
+    def _init_(self):
+        pygame.sprite.Sprite._init_(self)
+        super()._init_()
+        self.spritesheet = pygame.image.load(path.join('assets\img\Spritepato.png')).convert_alpha()
+        self.spritesheet = pygame.transform.scale(self.spritesheet, (200,200))
+        self.sprites = load_spriteshhet(self.spritesheet,3,5)
+        self.animations= {
+            'left':self.sprites[0:2],
+            'stay_left': self.sprites[0]
+        }
+        self.state='stay_left'
+        self.animation = self.animations[self.state]
+        self.frame=0
+        self.sprite_speed=0
+        self.last_update = pygame.time.get_ticks()
+        self.frame_ticks = 300
+        self.image = self.animation if isinstance(self.animation,list) else self.animation
         self.rect = self.image.get_rect()
         
         if randint(1, 2) == 1:
@@ -59,6 +89,7 @@ class Pato(pygame.sprite.Sprite):
 
 #atualiza as posicoes e tudo
     def update(self):
+        self.state='left'
         self.rect.x += self.speedx
         self.rect.y += self.speedy
 
@@ -69,15 +100,29 @@ class Pato(pygame.sprite.Sprite):
                 self.speedx = randint(-5, -3)
             else:
             # Lado esquerdo
+                self.sprite_speed=5
                 self.rect.x = randint(10,60)
                 self.speedx = randint(3, 5)
             
             self.rect.y = randint(0, 720)
             self.speedy = randint(-1, 1)  
- 
+        if self.sprite_speed!=0:
+            self.animate()
+    def animate(self):
+        now=pygame.time.get_ticks()
+        elapsed_ticks=now - self.last_update
+        if elapsed_ticks > self.frame_ticks:
+            self.last_update=now
+            self.frame+=1
+            if self.frame>=len(self.animations[self.state]):
+                self.frame=0
+        center= self.rect.center
+        self.image=self.animations[self.state][self.frame]
+        self.rect=self.image.get_rect()
+        self.rect.center=center
 class PatoFAST(pygame.sprite.Sprite):
-    def __init__(self):
-        pygame.sprite.Sprite.__init__(self)
+    def _init_(self):
+        pygame.sprite.Sprite._init_(self)
         self.image = pygame.image.load("assets/img/patosfast.png")
         self.image = pygame.transform.scale(self.image, (50, 50))
         self.rect = self.image.get_rect()  # Corrige para usar self.rect
@@ -193,8 +238,8 @@ while game != False:
                 if event.key == pygame.K_SPACE:
                     game ='jogo'
         window.fill((0, 0, 0))  # Preenche com a cor branca
-        window.blit(texto_tela_inicial,(WIDTH/2-80,HEIGHT/2-10))
-        window.blit(texto_tela_inicial2,(WIDTH/2-200,240))
+        window.blit(texto_tela_inicial,(WIDTH/2-40,HEIGHT/2-10))
+        window.blit(texto_tela_inicial2,(WIDTH/2-40,240))
         pygame.display.update() 
          # Mostra o novo frame para o jogador
     while game == 'gameover':
@@ -202,9 +247,6 @@ while game != False:
         assets['pontos'] = 0
         assets['tempo'] = 0
         assets['tempo_inicial'] += (clock.get_time()/1000)
-        imagem_final = pygame.image.load('assets/img/fundo.jpg').convert() 
-        imagem_final = pygame.transform.scale(image,(1080,720)) 
-        
         texto_tela_final = assets['fonte2'].render('Game Over ', True, (0, 0, 0))
 
         for event in pygame.event.get():

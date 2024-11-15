@@ -6,7 +6,7 @@ from pygame.sprite import Group
 import os
 from os import path
 
-img_dir=os.path.join(os.path.dirname(_file_),'assest\img')
+img_dir = os.path.join(os.path.dirname(__file__), 'assest', 'img')
 
 def load_spriteshhet(spritesheet,rows,columns):
     sprite_width=spritesheet.get_width()//columns

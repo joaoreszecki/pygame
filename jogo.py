@@ -58,6 +58,7 @@ class Monkey(pygame.sprite.Sprite):
     def __init__(self):
         # adicionamacaco
         pygame.sprite.Sprite.__init__(self)
+        self.name = "macacoz"
         self.image = pygame.image.load("assets/img/macaco.png")
         self.image = pygame.transform.scale(self.image, (150, 150))
         self.rect = self.image.get_rect()
@@ -192,13 +193,13 @@ class PatoFAST(pygame.sprite.Sprite):
                 self.state='right'
                 self.sprite_speed=5
                 self.rect.x = randint(1070, 1080)
-                self.speedx = randint(-7, -4)
+                self.speedx = randint(-10, -8)
             else:
                 # Lado esquerdo
                 self.state='left'
                 self.sprite_speed=5
                 self.rect.x = randint(10, 60)
-                self.speedx = randint(4, 7)
+                self.speedx = randint(8,10)
             
             self.rect.y = randint(0, 720)
             self.speedy = randint(-1, 1)

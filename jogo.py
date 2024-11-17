@@ -70,7 +70,7 @@ class Pato(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
         super().__init__()
         self.name = "Patonormal"
-        self.spritesheet = pygame.image.load(path.join('assets\img\patoduckhunt_combined.png')).convert_alpha()
+        self.spritesheet = pygame.image.load(path.join('assets/img/patoduckhunt_combined.png')).convert_alpha()
         self.spritesheet = pygame.transform.scale(self.spritesheet, (200,100))
         self.sprites = load_spriteshhet(self.spritesheet,1,6)
         self.animations= {
@@ -147,7 +147,7 @@ class PatoFAST(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
         super().__init__()
         self.name = "Patoroxo"
-        self.spritesheet = pygame.image.load(path.join('assets\img\patonovo.png')).convert_alpha()
+        self.spritesheet = pygame.image.load(path.join('assets/img/patonovo.png')).convert_alpha()
         self.spritesheet = pygame.transform.scale(self.spritesheet, (200,100))
         self.sprites = load_spriteshhet(self.spritesheet,1,6)
         self.animations= {

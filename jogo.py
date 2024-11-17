@@ -6,7 +6,7 @@ from pygame.sprite import Group
 import os
 from os import path
 
-img_dir = os.path.join(os.path.dirname(_file_), 'assest', 'img')
+img_dir = os.path.join(os.path.dirname(__file__), 'assest', 'img')
 
 def load_spriteshhet(spritesheet,rows,columns):
     sprite_width=spritesheet.get_width()//columns
@@ -25,6 +25,7 @@ clock = pygame.time.Clock()
 FPS = 60
 
 pygame.init()
+pygame.mixer.init()
 
 # ----- Gera tela principal
 WIDTH = 1080
@@ -43,14 +44,16 @@ assets['fonte2'] = pygame.font.Font(fonte2,28)
 assets['pontos'] = 0
 assets['tempo'] = 0
 assets['tempo_inicial'] = 0
-
+pygame.mixer.music.load('assets/snd/duckmusica.mp3')  # Música de fundo]
+pygame.mixer.music.play(loops=-1)  # Loop infinito
+pygame.mixer.music.set_volume(0.5)  # Ajuste o volume (0.0 a 1.0)
 
 # ----- Inicia estruturas de dados
 # Definindo os novos tipos
 class Monkey(pygame.sprite.Sprite):
-    def _init_(self):
+    def __init__(self):
         # adicionamacaco
-        pygame.sprite.Sprite._init_(self)
+        pygame.sprite.Sprite.__init__(self)
         self.image = pygame.image.load("assets/img/macaco.png")
         self.image = pygame.transform.scale(self.image, (150, 150))
         self.rect = self.image.get_rect()
@@ -58,11 +61,11 @@ class Monkey(pygame.sprite.Sprite):
         self.rect.bottom = HEIGHT - 10
         self.speedx = 0
 class Pato(pygame.sprite.Sprite):
-    def _init_(self):
-        pygame.sprite.Sprite._init_(self)
-        super()._init_()
-        self.spritesheet = pygame.image.load(path.join('assets\img\hoho.png')).convert_alpha()
-        self.spritesheet = pygame.transform.scale(self.spritesheet, (1000,1000))
+    def __init__(self):
+        pygame.sprite.Sprite.__init__(self)
+        super().__init__()
+        self.spritesheet = pygame.image.load(path.join('assets\img\patoduckhunt.png')).convert_alpha()
+        self.spritesheet = pygame.transform.scale(self.spritesheet, (100,100))
         self.sprites = load_spriteshhet(self.spritesheet,3,5)
         self.animations= {
             'left':self.sprites[0:2],
@@ -123,8 +126,8 @@ class Pato(pygame.sprite.Sprite):
         self.rect=self.image.get_rect()
         self.rect.center=center
 class PatoFAST(pygame.sprite.Sprite):
-    def _init_(self):
-        pygame.sprite.Sprite._init_(self)
+    def __init__(self):
+        pygame.sprite.Sprite.__init__(self)
         self.image = pygame.image.load("assets/img/patosfast.png")
         self.image = pygame.transform.scale(self.image, (50, 50))
         self.rect = self.image.get_rect()  # Corrige para usar self.rect

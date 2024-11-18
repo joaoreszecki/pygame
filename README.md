@@ -7,4 +7,5 @@ João Reszecki, Vittoria Carpeggiani e Felipe Braun
 - Primeiramente, instale o [VsCode](https://code.visualstudio.com)
 - Para conseguir rodar o jogo é preciso importar a bilbioteca do PyGame usando o seguinte comando:
 pip install pygame
-- Em seguida, clone nosso repositorio
+- Em seguida, clone nosso repositorio colocando a seguinte mensagem no terminal:
+git clone 

@@ -11,5 +11,5 @@ pip install pygame
 git clone https://github.com/joaoreszecki/pygame.git
 - Finalmente, após clonar o repositório, apenas execute o arquivo "jogo.py" e você estará pronto para jogar!
 
-#Lindo do nosso Video:
+# Link do nosso Video:
 [Mate o Pato](https://www.youtube.com/watch?v=z8QK_3btZmI)

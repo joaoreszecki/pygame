@@ -9,13 +9,13 @@ from os import path
 img_dir = os.path.join(os.path.dirname(__file__), 'assest', 'img')
 
 def load_spriteshhet(spritesheet,rows,columns):
-    sprite_width=spritesheet.get_width()//columns
-    sprite_height=spritesheet.get_height()//rows
-    sprites=[]
+    sprite_width = spritesheet.get_width()//columns
+    sprite_height = spritesheet.get_height()//rows
+    sprites = []
     for row in range(rows):
         for column in range(columns):
-            x= column* sprite_width
-            y= row * sprite_height
+            x = column * sprite_width
+            y = row * sprite_height
             image = pygame.Surface((sprite_width,sprite_height),pygame.SRCALPHA)
             image.blit(spritesheet,(0,0),pygame.Rect(x,y,sprite_width,sprite_height))
             sprites.append(image)
@@ -73,7 +73,7 @@ class Pato(pygame.sprite.Sprite):
         self.spritesheet = pygame.image.load(path.join('assets/img/patoduckhunt_combined.png')).convert_alpha()
         self.spritesheet = pygame.transform.scale(self.spritesheet, (200,100))
         self.sprites = load_spriteshhet(self.spritesheet,1,6)
-        self.animations= {
+        self.animations = {
             'left':self.sprites[0:2],
             'stay_left': self.sprites[0],
             'right':self.sprites[3:5],
@@ -82,8 +82,8 @@ class Pato(pygame.sprite.Sprite):
         }
         self.state='stay_left'
         self.animation = self.animations[self.state]
-        self.frame=0
-        self.sprite_speed=0
+        self.frame = 0
+        self.sprite_speed = 0
         self.last_update = pygame.time.get_ticks()
         self.frame_ticks = 300
         self.image = self.animation if isinstance(self.animation,list) else self.animation
@@ -91,13 +91,13 @@ class Pato(pygame.sprite.Sprite):
         
         if randint(1, 2) == 1:
             # Lado direito
-            self.sprite_speed=5
+            self.sprite_speed = 5
             self.state = 'right'
             self.rect.x = randint(1070, 1080)
             self.speedx = randint(-5, -3)
         else:
             # Lado esquerdo
-            self.sprite_speed=5
+            self.sprite_speed = 5
             self.state = 'left'
             self.rect.x = randint(10, 60)
             self.speedx = randint(3, 5)
@@ -114,33 +114,33 @@ class Pato(pygame.sprite.Sprite):
         if self.rect.x <= 0 or self.rect.y <= 0 or self.rect.x > 1080 or self.rect.y > 720:
             if randint(1, 2) == 1:
             # Lado direito
-                self.state='right'
-                self.sprite_speed=5
+                self.state = 'right'
+                self.sprite_speed = 5
                 self.rect.x = randint(1070, 1080)
                 self.speedx = randint(-5, -3)
             else:
             # Lado esquerdo
-                self.state='left'
-                self.sprite_speed=5
+                self.state = 'left'
+                self.sprite_speed = 5
                 self.rect.x = randint(10,60)
                 self.speedx = randint(3, 5)
             
             self.rect.y = randint(0, 720)
             self.speedy = randint(-1, 1)  
-        if self.sprite_speed!=0:
+        if self.sprite_speed != 0:
             self.animate()
     def animate(self):
-        now=pygame.time.get_ticks()
-        elapsed_ticks=now - self.last_update
+        now = pygame.time.get_ticks()
+        elapsed_ticks = now - self.last_update
         if elapsed_ticks > self.frame_ticks:
-            self.last_update=now
-            self.frame+=1
-            if self.frame>=len(self.animations[self.state]):
-                self.frame=0
-        center= self.rect.center
-        self.image=self.animations[self.state][self.frame]
-        self.rect=self.image.get_rect()
-        self.rect.center=center
+            self.last_update = now
+            self.frame += 1
+            if self.frame >= len(self.animations[self.state]):
+                self.frame = 0
+        center = self.rect.center
+        self.image = self.animations[self.state][self.frame]
+        self.rect = self.image.get_rect()
+        self.rect.center = center
 
 class PatoFAST(pygame.sprite.Sprite):
     def __init__(self):
@@ -150,17 +150,15 @@ class PatoFAST(pygame.sprite.Sprite):
         self.spritesheet = pygame.image.load(path.join('assets/img/patonovo.png')).convert_alpha()
         self.spritesheet = pygame.transform.scale(self.spritesheet, (200,100))
         self.sprites = load_spriteshhet(self.spritesheet,1,6)
-        self.animations= {
+        self.animations = {
             'left':self.sprites[0:2],
             'stay_left': self.sprites[0],
             'right':self.sprites[3:5],
-            
-
         }
-        self.state='stay_left'
+        self.state = 'stay_left'
         self.animation = self.animations[self.state]
-        self.frame=0
-        self.sprite_speed=0
+        self.frame = 0
+        self.sprite_speed = 0
         self.last_update = pygame.time.get_ticks()
         self.frame_ticks = 300
         self.image = self.animation if isinstance(self.animation,list) else self.animation
@@ -168,13 +166,13 @@ class PatoFAST(pygame.sprite.Sprite):
         
         if randint(1, 2) == 1:
             # Lado direito
-            self.sprite_speed=5
+            self.sprite_speed = 5
             self.state = 'right'
             self.rect.x = randint(1070, 1080)
             self.speedx = randint(-5, -3)
         else:
             # Lado esquerdo
-            self.sprite_speed=5
+            self.sprite_speed = 5
             self.state = 'left'
             self.rect.x = randint(10, 60)
             self.speedx = randint(3, 5)
@@ -196,29 +194,28 @@ class PatoFAST(pygame.sprite.Sprite):
                 self.speedx = randint(-10, -8)
             else:
                 # Lado esquerdo
-                self.state='left'
-                self.sprite_speed=5
+                self.state = 'left'
+                self.sprite_speed = 5
                 self.rect.x = randint(10, 60)
                 self.speedx = randint(8,10)
             
             self.rect.y = randint(0, 720)
             self.speedy = randint(-1, 1)
-        if self.sprite_speed!=0:
+        if self.sprite_speed != 0:
             self.animate()
         
     def animate(self):
-        now=pygame.time.get_ticks()
-        elapsed_ticks=now - self.last_update
+        now = pygame.time.get_ticks()
+        elapsed_ticks = now - self.last_update
         if elapsed_ticks > self.frame_ticks:
-            self.last_update=now
-            self.frame+=1
-            if self.frame>=len(self.animations[self.state]):
-                self.frame=0
-        center= self.rect.center
-        self.image=self.animations[self.state][self.frame]
-        self.rect=self.image.get_rect()
-        self.rect.center=center
-
+            self.last_update = now
+            self.frame += 1
+            if self.frame >= len(self.animations[self.state]):
+                self.frame = 0
+        center = self.rect.center
+        self.image = self.animations[self.state][self.frame]
+        self.rect = self.image.get_rect()
+        self.rect.center = center
 
 
 # ----- Inicia estruturas de dados
@@ -272,7 +269,7 @@ while game != False:
                         
         # ----- Gera saídas
         texto_pontos = assets['fonte'].render(f"{assets['pontos']}", True, (255, 255, 0))
-        if assets['tempo']>=0:
+        if assets['tempo'] >= 0:
             texto_tempo = assets['fonte'].render(f"TEMPO:{assets['tempo'] :.0f}", True, (255, 255, 0))
         else:
             texto_tempo = assets['fonte'].render(f"TEMPO:0", True, (255, 255, 0))
